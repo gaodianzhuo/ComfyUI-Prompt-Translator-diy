@@ -1,5 +1,5 @@
 # ComfyUI-Prompt-Translator-diy
-ComfyUI 通过语言模型自动翻译 Prompt 为中文提示词插件。
+ComfyUI 通过语言模型自动翻译 Prompt 为中文提示词插件。自动识别中文,兼容英文。
 
 增加了自定义的字典 .(translations.csv),使翻译后的结果更能贴合stablediffusion模型的语句习惯!
 

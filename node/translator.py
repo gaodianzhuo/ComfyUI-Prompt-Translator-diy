@@ -123,7 +123,7 @@ class PromptTextTranslation:
         return {
             "required": {
                 "text_trans": ("STRING", {"multiline": True, "default": "海边，日出"}),
-                "trans_switch": (["enabled", "disabled"],),
+                # "trans_switch": (["enabled", "disabled"],),
             },
         }
 
@@ -131,7 +131,7 @@ class PromptTextTranslation:
     FUNCTION = "translation"
     CATEGORY = "utils"
 
-    def translation(self, text_trans, trans_switch, ):
+    def translation(self, text_trans, ):
 
         if text_trans == "undefined":
             text_trans = ""
@@ -145,7 +145,8 @@ class PromptTextTranslation:
         cache = load_csv(my_translations)
 
 
-        if trans_switch == "enabled" and contains_chinese(text_trans):
+        # if trans_switch == "enabled" and contains_chinese(text_trans):
+        if contains_chinese(text_trans):
             text_trans = remove_unnecessary_spaces(text_trans)
             modified_text = replace_text(text_trans, cache)
             target_text = process_text(modified_text)
