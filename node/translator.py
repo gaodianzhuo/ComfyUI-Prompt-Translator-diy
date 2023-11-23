@@ -3,7 +3,8 @@ import re
 import os
 import csv
 import string
-from transformers import MBartForConditionalGeneration, MBart50TokenizerFast
+from transformers import MBartForConditionalGeneration, MBart50TokenizerFast,MarianMTModel,MarianTokenizer
+
 
 # model = MBartForConditionalGeneration.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
 # tokenizer = MBart50TokenizerFast.from_pretrained("facebook/mbart-large-50-many-to-many-mmt")
@@ -19,27 +20,48 @@ parent_directory_path = os.path.dirname(my_dir)  # 获取上一级目录的路�
 my_translations = parent_directory_path + "/translations.csv"
 
 
-model_id = os.path.dirname(os.path.dirname(parent_directory_path)) + "/mbart-large-50-many-to-one-mmt"
+# model_id = os.path.dirname(os.path.dirname(parent_directory_path)) + "/mbart-large-50-many-to-one-mmt"
+# model = MBartForConditionalGeneration.from_pretrained(model_id)
+# tokenizer = MBart50TokenizerFast.from_pretrained(model_id)
 
-model = MBartForConditionalGeneration.from_pretrained(model_id)
-tokenizer = MBart50TokenizerFast.from_pretrained(model_id)
+
+model_id = os.path.dirname(os.path.dirname(parent_directory_path)) + "/opus-mt-zh-en"
+model = MarianMTModel.from_pretrained("./opus-mt-zh-en")
+tokenizer = MarianTokenizer.from_pretrained("./opus-mt-zh-en")
+
+
 
 tokenizer.src_lang = "zh_CN"
 
 
+def translate(chinese_str: str) -> str:
+    # 对中文句子进行分词
+    input_ids = tokenizer.encode(chinese_str, return_tensors="pt")
+
+    # 进行翻译
+    output_ids = model.generate(input_ids)
+
+    # 将翻译结果转换为字符串格式
+    english_str = tokenizer.decode(output_ids[0], skip_special_tokens=True)
+    #如果最后有一个.，则去掉
+    if english_str[-1] == '.':
+        english_str = english_str[:-1]
+    return english_str
 
 
-def translate(text):
-    try:
-        encoded = tokenizer(text, return_tensors="pt")
-        generated_tokens = model.generate(
-            **encoded,
-            forced_bos_token_id=tokenizer.lang_code_to_id["en_XX"]
-        )
-        return tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)[0]
-    except:
-        print("文本翻译错误" )
-        return text
+
+
+# def translate(text):
+#     try:
+#         encoded = tokenizer(text, return_tensors="pt")
+#         generated_tokens = model.generate(
+#             **encoded,
+#             forced_bos_token_id=tokenizer.lang_code_to_id["en_XX"]
+#         )
+#         return tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)[0]
+#     except:
+#         print("文本翻译错误" )
+#         return text
 
 
 # 读取 csv 文件到内存中缓存起来
