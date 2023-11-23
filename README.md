@@ -14,10 +14,9 @@ cd ComfyUI/custom_nodes
 git clone https://github.com/gaodianzhuo/ComfyUI-Prompt-Translator-diy.git
 ```
 
-## 语言模型下载
+## 翻译模型位置
 ```
-pip install -U huggingface_hub hf_transfer
-huggingface-cli download --resume-download Helsinki-NLP/opus-mt-zh-en
+放在ComfyUI目录下
 ```
 
 ## 使用效果
