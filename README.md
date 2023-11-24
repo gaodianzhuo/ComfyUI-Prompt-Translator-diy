@@ -3,10 +3,15 @@ ComfyUI-Prompt-Translator-diy为中文提示词插件。自动识别中文,兼�
 
 增加了自定义的字典 .(translations.csv),使翻译后的结果更能贴合stablediffusion模型的语句习惯!
 
-它基于模型 [https://huggingface.co/Helsinki-NLP/opus-mt-zh-en]
-
+它基于翻译模型 [https://huggingface.co/Helsinki-NLP/opus-mt-zh-en]
 
  该翻译插件不需要联网翻译，只需要下载翻译模型就可以正常工作。  
+
+## 环境
+```
+Loading: ComfyUI-Manager (V1.0.1)
+ComfyUI Revision: 1698 [107e78b1] | Released on '2023-11-16'
+```
 
 ## 安装插件
 ```
