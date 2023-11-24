@@ -3,6 +3,7 @@ import re
 import os
 import csv
 import string
+from collections import OrderedDict
 from transformers import MBartForConditionalGeneration, MBart50TokenizerFast,MarianMTModel,MarianTokenizer
 
 
@@ -20,9 +21,23 @@ parent_directory_path = os.path.dirname(my_dir)  # 获取上一级目录的路�
 my_translations = parent_directory_path + "/translations.csv"
 
 
+# 速度慢,文件大
 # model_id = os.path.dirname(os.path.dirname(parent_directory_path)) + "/mbart-large-50-many-to-one-mmt"
 # model = MBartForConditionalGeneration.from_pretrained(model_id)
 # tokenizer = MBart50TokenizerFast.from_pretrained(model_id)
+
+# def translate(text):
+#     try:
+#         encoded = tokenizer(text, return_tensors="pt")
+#         generated_tokens = model.generate(
+#             **encoded,
+#             forced_bos_token_id=tokenizer.lang_code_to_id["en_XX"]
+#         )
+#         return tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)[0]
+#     except:
+#         print("文本翻译错误" )
+#         return text
+
 
 
 model_id = os.path.dirname(os.path.dirname(parent_directory_path)) + "/opus-mt-zh-en"
@@ -50,26 +65,25 @@ def translate(chinese_str: str) -> str:
 
 
 
+def sort_dict_by_key_length(d):
+    sorted_keys = sorted(d.keys(), key=lambda x: len(x),reverse=True)
+    sorted_dict = OrderedDict()
+    for key in sorted_keys:
+        sorted_dict[key] = d[key]
+    return sorted_dict
 
-# def translate(text):
-#     try:
-#         encoded = tokenizer(text, return_tensors="pt")
-#         generated_tokens = model.generate(
-#             **encoded,
-#             forced_bos_token_id=tokenizer.lang_code_to_id["en_XX"]
-#         )
-#         return tokenizer.batch_decode(generated_tokens, skip_special_tokens=True)[0]
-#     except:
-#         print("文本翻译错误" )
-#         return text
+
 
 
 # 读取 csv 文件到内存中缓存起来
 def load_csv(csv_file):
     with open(csv_file, 'r', encoding='utf-8') as f:
         reader = csv.reader(f)
-        cache = dict(reader)
+        cache = OrderedDict(reader)
+        cache = sort_dict_by_key_length(cache)
+
     return cache
+
 
 
 
