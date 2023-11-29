@@ -163,10 +163,11 @@ class PromptTextTranslation:
         if contains_chinese(text_trans):
             text_trans = remove_unnecessary_spaces(text_trans)
             modified_text = replace_text(text_trans, cache)
+            print("modified_text: " + modified_text)
+
             target_text = process_text(modified_text)
         else:
             target_text = text_trans
-
 
         print("target: " + target_text)
 
