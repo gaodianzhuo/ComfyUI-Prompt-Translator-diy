@@ -166,6 +166,7 @@ class PromptTextTranslation:
             print("modified_text: " + modified_text)
 
             target_text = process_text(modified_text)
+            target_text = re.sub('♪','', target_text)
         else:
             target_text = text_trans
 
