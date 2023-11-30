@@ -41,7 +41,7 @@ my_translations = parent_directory_path + "/translations.csv"
 
 
 model_id = os.path.dirname(os.path.dirname(parent_directory_path)) + "/opus-mt-zh-en"
-model = MarianMTModel.from_pretrained("./opus-mt-zh-en")
+model = MarianMTModel.from_pretrained("./opus-mt-zh-en").cuda()
 tokenizer = MarianTokenizer.from_pretrained("./opus-mt-zh-en")
 
 
@@ -51,7 +51,7 @@ tokenizer.src_lang = "zh_CN"
 
 def translate(chinese_str: str) -> str:
     # 对中文句子进行分词
-    input_ids = tokenizer.encode(chinese_str, return_tensors="pt")
+    input_ids = tokenizer.encode(chinese_str, return_tensors="pt").cuda()
 
     # 进行翻译
     output_ids = model.generate(input_ids)
