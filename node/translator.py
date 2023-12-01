@@ -3,7 +3,7 @@ import re
 import os
 import csv
 import string
-from collections import OrderedDict
+from collections import OrderedDict,Counter
 from transformers import MBartForConditionalGeneration, MBart50TokenizerFast,MarianMTModel,MarianTokenizer
 
 
@@ -51,7 +51,7 @@ tokenizer.src_lang = "zh_CN"
 
 def translate(chinese_str: str) -> str:
     # 对中文句子进行分词
-    input_ids = tokenizer.encode(chinese_str, return_tensors="pt").cuda()
+    input_ids = tokenizer.encode(chinese_str, return_tensors="pt",padding=True).cuda()
 
     # 进行翻译
     output_ids = model.generate(input_ids)
@@ -101,6 +101,32 @@ def remove_unnecessary_spaces(text):
     return re.sub(pattern, replacement, text)
 
 
+
+
+
+
+def replace_text(text, cache):
+    for key, value in cache.items():
+        if key in text:
+            text = text.replace(key, ' ' +value + ' ')
+    return text
+
+
+
+def count_max_repeated_words(s):
+    # 使用正则表达式匹配英文单词
+    words = re.findall(r'\b\w+\b', s)
+
+    # 使用Counter统计词频
+    word_counts = Counter(words)
+
+    # 找到最大的词频
+    max_count = max(word_counts.values())
+
+    return max_count
+
+
+
 def process_text(text):
     # 将中文全角标点符号替换为半角标点符号
     text = text.translate(str.maketrans('，。！？；：‘’“”（）【】', ',.!?;:\'\'\"\"()[]'))
@@ -117,17 +143,11 @@ def process_text(text):
         else:
             # 调用 transfer 函数进行翻译
             text_array[i] = translate(text_array[i])
+            if count_max_repeated_words(text_array[i])>2:
+                text_array[i] = ""
+            
     # 重新用逗号连接成字符串并返回
     return ','.join(text_array)
-
-
-
-def replace_text(text, cache):
-    for key, value in cache.items():
-        if key in text:
-            text = text.replace(key, value + ' ')
-    return text
-
 
 
 
@@ -166,6 +186,7 @@ class PromptTextTranslation:
             print("modified_text: " + modified_text)
 
             target_text = process_text(modified_text)
+            # target_text = translate(modified_text)
             target_text = re.sub('♪','', target_text)
         else:
             target_text = text_trans
