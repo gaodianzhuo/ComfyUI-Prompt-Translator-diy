@@ -78,7 +78,7 @@ def sort_dict_by_key_length(d):
 # 读取 csv 文件到内存中缓存起来
 def load_csv(csv_file):
     with open(csv_file, 'r', encoding='utf-8') as f:
-        reader = csv.reader(f)
+        reader = csv.reader(f,delimiter="\u0001")
         cache = OrderedDict(reader)
         cache = sort_dict_by_key_length(cache)
 
