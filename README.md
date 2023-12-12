@@ -9,6 +9,9 @@ ComfyUI-Prompt-Translator-diy为中文提示词插件。自动识别中文,兼�
 
 ## 环境
 ```
+需要cuda,因为现在生图速度大幅增加,翻译速度也需要跟上来,所以直接采用粗大推理了
+ubuntu 20.04
+NVIDIA-SMI 525.116.03   Driver Version: 525.116.03   CUDA Version: 12.0 
 Loading: ComfyUI-Manager (V1.0.1)
 ComfyUI Revision: 1698 [107e78b1] | Released on '2023-11-16'
 ```
@@ -21,7 +24,10 @@ git clone https://github.com/gaodianzhuo/ComfyUI-Prompt-Translator-diy.git
 
 ## 翻译模型位置
 ```
-放在ComfyUI目录下
+opus-mt-zh-en目录,放在ComfyUI主目录下
+
+-ComfyUI
+ --opus-mt-zh-en
 ```
 
 ## 使用效果
