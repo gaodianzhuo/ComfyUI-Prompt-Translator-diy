@@ -29,6 +29,12 @@ opus-mt-zh-en目录,放在ComfyUI主目录下
 -ComfyUI
  --opus-mt-zh-en
 ```
+## 插件位置
+![插件位置](textt.png)
+
+Add Node --> utils --> 文本翻译
+
+或者搜索:PromptTextTranslation
 
 ## 使用效果
 ![使用效果](ui.png)
